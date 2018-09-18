@@ -1,0 +1,24 @@
+use Libraries.Game.Graphics.Drawable
+use Libraries.Interface.Events.MouseMovementListener
+use Libraries.Interface.Events.MouseEvent
+use Libraries.Compute.Affine2 //This is missing from the original code 
+
+
+
+class MouseFollower is Drawable, MouseMovementListener
+   // This action will be called when the MouseFollower receives a MouseEvent because the mouse was moved with no mouse buttons being held down.
+   action MovedMouse(MouseEvent event)
+       // This code sets the center of the box directly under the mouse.
+       number x = event:GetX()
+       number y = event:GetY()
+       SetCenter(x, y)
+   end
+   // This action will be called when the MouseFollower receives a MouseEvent because the mouse was moved while a mouse button was being held down.
+    Affine2 affine //This is missing from the original code 
+   action DraggedMouse(MouseEvent event)
+       // This code makes the box move in the opposite direction of the mouse.
+       number x = event:GetMovementX()
+       number y = event:GetMovementY()
+       affine:Translate(-x, -y) // affine: is missing from the original code 
+   end
+end

@@ -1,0 +1,134 @@
+//Part 1
+/*
+use Libraries.Game.Game
+use Libraries.Game.InputMonitor
+use Libraries.Interface.Events.KeyboardEvent
+use Libraries.Sound.Audio
+
+class Main is Game
+   //create an InputMonitor object
+   InputMonitor monitor
+
+   //create a KeyboardEvent object
+   KeyboardEvent keys
+   Audio keySound
+   Audio mouseSound
+
+   action Main
+       StartGame()
+   end
+
+   action CreateGame
+       keySound:Load("AudioFiles/lightSound.wav")
+       mouseSound:Load("AudioFiles/heavySound.wav")
+   end
+
+   action Update(number seconds)
+       // If the user is currently clicking the mouse, play a sound.
+       if monitor:IsClicked()
+           mouseSound:Play()
+       end
+
+       // If the user is pressing the spacebar, play a sound.
+       if monitor:IsKeyPressed(keys:SPACE)
+           keySound:Play()
+       end
+   end
+
+end
+*/
+//Part 2
+/*
+use Libraries.Game.Game
+
+class Main is Game
+   // We create a object using our Soundboard listener class.
+   Soundboard board
+
+   action Main
+       StartGame()
+   end
+
+   action CreateGame
+       // We add the listener to our game.  This has the effect of letting the engine know 
+       //that the Soundboard object should be notified of keyboard events.
+       AddKeyboardListener(board)
+   end
+
+   action Update(number seconds)
+   end
+end
+*/
+//Part 3
+/*
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Color
+
+class Main is Game
+   ColorSquare square
+
+   action Main
+       StartGame()
+   end
+
+   action CreateGame
+       // This code draws our square on the screen.
+       Color white
+       white = white:White()
+       square:LoadFilledRectangle(200, 200, white)
+       square:SetPosition(300, 200)
+       Add(square)
+   end
+
+   action Update(number seconds)
+   end
+end
+*/
+//Part 4
+/*
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+
+class Main is Game
+   MouseFollower box
+
+   action Main
+       StartGame()
+   end
+
+   action CreateGame
+       // This code sets the box's image and adds it to the game screen.
+       box:LoadFilledRectangle(50, 50)
+       Add(box)
+
+       // This line makes the box listen for mouse events from mouse movement.
+       AddMouseMovementListener(box)
+   end
+
+   action Update(number seconds)
+   end
+end
+*/
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+
+class Main is Game
+   RotatingItem triangle
+
+   action Main
+       StartGame()
+   end
+
+   action CreateGame
+       // This code sets the triangle's image and location, and adds it to the game screen.
+       triangle:LoadFilledTriangle(0, 0, 150, 150, 150, 0)
+       triangle:SetPosition(325, 225)
+       Add(triangle)
+
+       // This line makes the triangle listen for mouse events from the mouse wheel.
+       AddMouseWheelListener(triangle)
+   end
+
+   action Update(number seconds)
+   end
+end

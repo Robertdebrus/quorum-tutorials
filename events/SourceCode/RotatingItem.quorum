@@ -1,0 +1,11 @@
+use Libraries.Game.Graphics.Drawable
+use Libraries.Interface.Events.MouseEvent
+use Libraries.Interface.Events.MouseWheelListener
+
+class RotatingItem is Drawable, MouseWheelListener
+   //This action will be called when the mouse wheel is scrolled.
+   action ScrolledMouse(MouseEvent event)
+       number amount = event:scrollAmount
+       Rotate(amount)
+   end
+end

@@ -1,0 +1,134 @@
+/*
+//Part 1
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+
+class Main is Game
+    Drawable spaceship
+
+    action Main
+        StartGame()
+    end
+
+    action CreateGame
+        spaceship:Load("assets/alien.png")
+        Add(spaceship)
+
+        // this line changes the x position of our spaceship drawable to be at 100.
+        spaceship:SetX(100)
+
+        // this line changes the y-position of our spaceship drawable to be at 50.
+        spaceship:SetY(50)
+    end
+
+    action Update(number seconds)
+    end
+end
+*/
+//Part 2
+/*
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+
+class Main is Game
+    Drawable spaceship
+
+    action Main
+        StartGame()
+    end
+
+    action CreateGame
+        spaceship:Load("assets/alien.png")
+        Add(spaceship)
+    end
+
+    action Update(number seconds)
+        // these two statements calculate the new x and y positions by getting the current x and y
+        // positions of the Drawable and adding a "speed" factor multiplied by seconds
+        number newX = spaceship:GetX() + 100 * seconds
+        number newY = spaceship:GetY() + 50 * seconds
+
+        // this statement sets the new x and y positions of the drawable to the values just
+        // calculated.  Note we can use SetPosition to set both X and Y at the same time.
+        spaceship:SetPosition(newX, newY)
+    end
+end
+*/
+//Part 3
+/*
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+
+class Main is Game
+    Drawable spaceship
+
+    action Main
+        StartGame()
+    end
+
+    action CreateGame
+        spaceship:Load("assets/alien.png")
+        spaceship:SetPosition(100, 100)
+
+        // this line causes the spaceship to be rotated 45 degrees in 
+        // the counterclockwise direction
+        spaceship:SetRotation(-45)
+
+        Add(spaceship)
+    end
+
+    action Update(number seconds)
+    end
+end
+*/
+// There are many possible examples here, but they all work, just copy them from https://quorumlanguage.com/tutorials/games/animation2D.html
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.ImageSheet
+
+class Main is Game
+    ImageSheet sheet
+    Drawable girl
+
+    //this line declares a number variable representing the frame rate for the animation
+    number fps = 4
+    //this line creates a number variable to track the time since the last frame change
+    number elapsedTime = 0
+    //this line creates an integer variable to track which frame we are displaying
+    integer frame = 1
+
+    action Main
+        StartGame()
+    end
+
+    action CreateGame
+        //these line load the ImageSheet and initial frame into a drawable and add it to the game
+        sheet:Load("resources/girl.atlas")
+        girl:Load(sheet:GetDrawable("Girl frame 1"))
+        Add(girl)
+    end  
+
+    action Update(number seconds)
+        //this line adds the seconds since the last frame to our timer variables
+        elapsedTime = elapsedTime + seconds
+        //this line checks if the elapsed time is greater than our interval for changing frames
+        if elapsedTime >= 1/fps
+            //if yes, increment the frame
+            frame = frame + 1
+
+            //if frame is greater than 3, reset it to one
+            if frame > 3
+                frame = 1
+            end
+
+            //now that you know the next frame, set the Drawable to the next image by 
+            //loading the image from the ImageSheet
+            girl:Load(sheet:GetDrawable("Girl frame " + frame))
+
+            //once we have updated our drawable, we need to reset the timer.  Instead of
+            //reseting to 0, we subtract the length of time between frames to prevent any 
+            //extra time from building up over time, slowing our animation
+            elapsedTime = elapsedTime - 1/fps
+        end
+    end
+end

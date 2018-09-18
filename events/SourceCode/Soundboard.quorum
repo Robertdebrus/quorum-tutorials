@@ -1,0 +1,28 @@
+use Libraries.Interface.Events.KeyboardListener
+use Libraries.Interface.Events.KeyboardEvent
+use Libraries.Sound.Audio
+
+class Soundboard is KeyboardListener
+   Audio pressedSound
+   Audio releasedSound
+
+   on create
+       // We load our sounds when this object is created.
+       pressedSound:Load("AudioFiles/lightSound.wav")
+       releasedSound:Load("AudioFiles/heavySound.wav")
+   end
+
+   // This action will be called when any keyboard key is pressed.
+   action PressedKey(KeyboardEvent event)
+   if event:keyCode = event:SPACE
+       pressedSound:Play()
+   end
+end
+   // This action will be called when any keyboard key is released.
+   action ReleasedKey(KeyboardEvent event)
+       if event:keyCode = event:SPACE
+           releasedSound:Play()
+       end
+   end
+
+end

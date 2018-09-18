@@ -1,0 +1,61 @@
+/* 
+// Part 1
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+use Libraries.System.File
+
+class Main is Game
+    Drawable logo
+
+    action Main
+        StartGame()
+    end
+
+    action CreateGame
+        File file
+        file:SetPath("assets\hourofcode.png")
+        logo:Load(file)
+        Add(logo)
+    end
+
+    action Update(number seconds)
+    end
+end
+*/
+// Part 2
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.ImageSheet
+
+class Main is Game
+    //store a placeholder in memory for books and the bunny
+    //by saying these are undefined, we are telling Quorum not to make the objects
+    //the reason we do that is because the ImageSheet will make the objects for us
+    Drawable books = undefined
+    Drawable bunny = undefined
+
+    //create an ImageSheet object we can use in our create game action.
+    ImageSheet sheet
+
+    action Main
+        StartGame()
+    end
+
+    action CreateGame
+        //this loads the atlas file into the ImageSheet. Importantly, we load
+        //the .atlas, not the .png. The reason is because our atlas generator may 
+        //generate multiple images, which means the system should load them all.
+        sheet:Load("assets/MyImageSheet.atlas")
+
+        //load the two Drawables from the ImageSheet.
+        books = sheet:GetDrawable("books")
+        bunny = sheet:GetDrawable("hourofcode")
+
+        //add the Drawables to the game.
+        Add(books)
+        Add(bunny)
+    end
+
+    action Update(number seconds)
+    end
+end

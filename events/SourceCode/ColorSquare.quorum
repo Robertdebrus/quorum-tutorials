@@ -1,0 +1,30 @@
+//Notice that we are using mouse event libraries now instead of keyboard event libraries.
+use Libraries.Interface.Events.MouseListener
+use Libraries.Interface.Events.MouseEvent
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
+
+class ColorSquare is Drawable, MouseListener
+   Color clickColor
+   Color releaseColor
+
+   on create
+       // Set the colors that this program will use.
+       clickColor:SetColor(0, 0.9, 0, 1)
+       releaseColor:SetColor(0.9, 0, 0, 1)
+       SetColor(releaseColor)
+
+       // Add this object as a listener so that it receives mouse events when it is clicked.
+       AddMouseListener(me)
+   end
+
+   // This action will be called when the ColorSquare receives a MouseEvent from a mouse button being clicked.
+   action ClickedMouse(MouseEvent event)
+       SetColor(clickColor)
+   end
+
+   // This action will be called when the ColorSquare receives a MouseEvent from a mouse button being released.
+   action ReleasedMouse(MouseEvent event)
+       SetColor(releaseColor)
+   end
+end

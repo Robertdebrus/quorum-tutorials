@@ -1,0 +1,27 @@
+
+girl.png
+size: 256,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Girl frame 1
+  rotate: false
+  xy: 104, 2
+  size: 48, 100
+  orig: 48, 100
+  offset: 0, 0
+  index: -1
+Girl frame 2
+  rotate: false
+  xy: 2, 2
+  size: 49, 100
+  orig: 49, 100
+  offset: 0, 0
+  index: -1
+Girl frame 3
+  rotate: false
+  xy: 53, 2
+  size: 49, 100
+  orig: 49, 100
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,124 @@
+//This is the last example from https://quorumlanguage.com/tutorials/games/events.html, but it was too li=ong to inlcude in the other project
+
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
+use Libraries.Interface.Events.CollisionListener2D
+use Libraries.Sound.Audio
+use Libraries.Interface.Events.CollisionEvent2D
+use Libraries.Interface.Item2D
+
+class Main is Game, CollisionListener2D
+
+   Drawable block
+   Drawable circle
+
+   Audio beginSound
+   Audio finishSound
+   action Main
+       StartGame()
+   end
+
+   action CreateGame
+       // These two lines load our sound files
+       beginSound:Load("AudioFiles/lightSound.wav")
+       finishSound:Load("AudioFiles/heavySound.wav")
+
+       // These lines are used to load and draw the circle and square.
+       block:LoadFilledRectangle(300, 200)
+       Color white
+       white = white:White()
+       circle:LoadFilledCircle(60, white)
+       block:SetPosition(250, 200)
+       circle:SetPosition(0, 240)
+       Add(block)
+       Add(circle)
+
+       // These two lines give our Drawables a name so that we can identify
+       // each object and do things to them when they begin or finish colliding
+       block:SetName("block")
+       circle:SetName("circle")
+
+       // These two lines are used to make the two items detect collisions.
+       block:SetCollidable(true)
+       circle:SetCollidable(true)
+
+       // This line is used to make our Game class listen for and handle collisions
+       AddCollisionListener(me)
+   end
+
+   action Update(number seconds)
+       // The Update action is used in this program to make the circle move.
+       circle:SetX(circle:GetX() + 200 * seconds)
+       if circle:GetX() > GetScreenWidth()
+           circle:SetX(0 - circle:GetWidth())
+       end
+   end
+
+   /*
+   This is the action that gets called automatically by the game engine when
+   a collision begins between two collidable items. We are passed an item
+   that represents the event of the collision. From that item we can get the
+   items that are colliding.
+   */
+   action BeginCollision(CollisionEvent2D event)
+       // First things first, play the begin collision sound
+       beginSound:Play()
+
+       // Next, we want to get our items out of the collision event
+       Drawable itemA = cast(Drawable, event:GetItemA())
+       Drawable itemB = cast(Drawable, event:GetItemB())
+
+       // the block will turn blue when they start colliding
+       Color blue
+       blue = blue:Blue()
+
+       // the circle will turn red when they start colliding
+       Color red
+       red = red:Red()
+       if itemA:GetName() = "block"
+           // if itemA is the block, then itemA gets the color blue and itemB
+           // bets the color red.
+           itemA:SetColor(blue)
+           itemB:SetColor(red)
+       else
+           // otherwise, the reverse is true
+           itemA:SetColor(red)
+           itemB:SetColor(blue)
+       end
+   end
+
+   /*
+   This is the action that gets called automatically by the game engine when
+   a collision finishes between two collidable items. We are passed an item
+   that represents the event of the collision. From that item we can get the
+   items that are colliding.
+   */
+   action FinishCollision(CollisionEvent2D event)
+       // First things first, play the finish collision sound
+       finishSound:Play()
+
+       // Next, we want to get our items out of the collision event
+       Drawable itemA = cast(Drawable, event:GetItemA())
+       Drawable itemB = cast(Drawable, event:GetItemB())
+
+       // the block will turn black when they finish colliding
+       Color black
+       black = black:Black()
+
+       // the circle will turn white when they finish colliding
+       Color white
+       white = white:White()
+
+       if itemA:GetName() = "block"
+           // if itemA is the block, then itemA gets the color black and itemB
+           // bets the color white.
+           itemA:SetColor(black)
+           itemB:SetColor(white)
+       else
+           // otherwise, the reverse is true
+           itemA:SetColor(white)
+           itemB:SetColor(black)
+       end
+   end
+end
