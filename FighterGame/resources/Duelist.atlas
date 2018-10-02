@@ -1,0 +1,20 @@
+
+Duelist.png
+size: 256,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+duelist
+  rotate: false
+  xy: 76, 2
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+duelist-attack
+  rotate: false
+  xy: 2, 2
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
