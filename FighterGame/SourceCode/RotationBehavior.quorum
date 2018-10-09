@@ -1,38 +1,30 @@
-use Libraries.Interface.Behaviors.Behavior
-use Libraries.Interface.Events.BehaviorEvent
-use Libraries.Game.Graphics.Color
+//Notice that we are using mouse event libraries now instead of keyboard event libraries.
+use Libraries.Interface.Events.MouseListener
+use Libraries.Interface.Events.MouseEvent
 use Libraries.Game.Graphics.Drawable
-use Libraries.Sound.Speech
+use Libraries.Game.Graphics.Color
 
-class RotationBehavior is Behavior
+class ColorSquare is Drawable, MouseListener
+   Color clickColor
+   Color releaseColor
 
-    Drawable item
-    number timer = 0
+   on create
+       // Set the colors that this program will use.
+       clickColor:SetColor(0, 0.9, 0, 1)
+       releaseColor:SetColor(0.9, 0, 0, 1)
+       SetColor(releaseColor)
 
-    action Run(BehaviorEvent event)
-        item = cast(Drawable, event:GetItem())
-        Speech speech
-        speech:Say("Rotate", false)
-    end
+       // Add this object as a listener so that it receives mouse events when it is clicked.
+       AddMouseListener(me)
+   end
 
-    action Update(number seconds)
-        timer = timer + seconds
+   // This action will be called when the ColorSquare receives a MouseEvent from a mouse button being clicked.
+   action ClickedMouse(MouseEvent event)
+       SetColor(clickColor)
+   end
 
-        if item not= undefined
-            item:Rotate(72 * seconds)
-        end
-    end
-
-    action Dispose
-        if item not= undefined
-            Color color
-            item:SetColor(color:Green())
-            Speech speech
-            speech:Say("Rotation complete", false)
-        end
-    end
-
-    action IsFinished returns boolean
-        return timer >= 5
-    end
+   // This action will be called when the ColorSquare receives a MouseEvent from a mouse button being released.
+   action ReleasedMouse(MouseEvent event)
+       SetColor(releaseColor)
+   end
 end

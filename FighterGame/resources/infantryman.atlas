@@ -1,27 +1,27 @@
 
-spearman.png
+infantryman.png
 size: 256,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-spearman frame 1
+heavyinfantry frame 1
+  rotate: false
+  xy: 86, 3
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+heavyinfantry frame 2
+  rotate: false
+  xy: 160, 3
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+heavyinfantry frame 3
   rotate: false
   xy: 2, 2
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-spearman frame 2
-  rotate: false
-  xy: 76, 2
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-spearman frame 3
-  rotate: false
-  xy: 150, 2
-  size: 72, 72
-  orig: 72, 72
+  size: 82, 73
+  orig: 82, 73
   offset: 0, 0
   index: -1

@@ -1,36 +1,147 @@
 use Libraries.Game.Game
-
-/*
-    This is a default class for creating a game in Quorum. Note that the Main 
-    action begins by calling StartGame(), which loads a window a game can 
-    be displayed in. The action CreateGame is where the game should load any 
-    assets, like images to be displayed, frames of animation, or sounds to be
-    played. 
-*/
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
+use Libraries.Game.Graphics.ImageSheet
+use Libraries.System.File
+use Libraries.Game.Layer2D
+use Libraries.Interface.Controls.Button
 class Main is Game
-    /*
-        This action, Main, starts our computer program. In Quorum, programs always
-        begin from Main.
-    */
+    
+    Drawable spearman
+    Drawable infantryman
+    Drawable duelist
+    Drawable arrow
+    ImageSheet sheet
+    ColorSquare hero1
+    MouseFollower box1
+    MouseFollower box2
+    MouseFollower box3
+    MouseFollower box4
+    
+    integer scene = 1
+
+    //this line declares a number variable representing the frame rate for the animation
+    number fps = 3
+    //this line creates a number variable to track the time since the last frame change
+    number elapsedTime = 0
+    //this line creates an integer variable to track which frame we are displaying
+    integer frame = 1
+       
+
     action Main
+
         StartGame()
     end
 
-    /*
-        This action sets up the default values for a game. For example, we might
-        use the Libraries.Game.Graphics.Drawable class to load up an image or 
-        a shape. Or, we might add a Libraries.Interface.Button for making something clickable
-        or a Libraries.Interface.TextBox for gathering user input in a game.
-    */
-    action CreateGame
+    public action CreateGame 
+       public Layer2D characterSelect
+
+        Color grey
+        grey:SetColor(0, 0, 0, 0.5)
+        Color white
+        white = white:White()
+        hero1:LoadFilledRectangle(700, 500, white)
+        hero1:SetPosition(1, 1)
+
+        box1:LoadFilledRectangle(390, 290, grey)
+        box1:SetPosition(1, 1)
+        characterSelect:Add(box1)
+        AddMouseMovementListener(box1)
+
+        box2:LoadFilledRectangle(390, 290, grey)
+        box2:SetPosition(400, 300)
+        characterSelect:Add(box2)
+        AddMouseMovementListener(box2)
+
+        box3:LoadFilledRectangle(390, 290, grey)
+        box3:SetPosition(1, 300)
+        characterSelect:Add(box3)
+        AddMouseMovementListener(box3)
+
+        box4:LoadFilledRectangle(390, 290, grey)
+        box4:SetPosition(400, 1)
+        characterSelect:Add(box4)
+        AddMouseMovementListener(box4)
+
+        sheet:Load("resources\duelist.atlas")
+        duelist:Load(sheet:GetDrawable("duelist frame 1"))
+
+        sheet:Load("resources\infantryman.atlas")
+        infantryman:Load(sheet:GetDrawable("heavyinfantry frame 1"))
+
+        sheet:Load("resources\spearman.atlas")
+        spearman:Load(sheet:GetDrawable("spearman frame 1"))
+
+        File file
+        file:SetPath("resources\Arrow.png")
+        arrow:Load(file)
+        characterSelect:Add(arrow)
+        
+
+
+        characterSelect:Add(duelist)
+        characterSelect:Add(infantryman)
+        characterSelect:Add(spearman)
+
+        duelist:SetX(150)
+        duelist:SetY(125)
+        infantryman:SetX(150)
+        infantryman:SetY(400)
+        spearman:SetX(550)
+        spearman:SetY(400)
+        arrow:SetX(500)
+        arrow:SetY(80)
+
+        AddLayer(characterSelect)   
     end
 
-    /*
-        The update action is called on every "frame" of animation in a game. This
-        action should be used to do operations on items. So, for example, we 
-        might use this action to change frames of animation, to rotate items, 
-        or to make creatures jump.
-    */
-    action Update(number seconds)
+      action Update(number seconds)
+        if scene = 1
+            //this line adds the seconds since the last frame to our timer variables
+            elapsedTime = elapsedTime + seconds
+            //this line checks if the elapsed time is greater than our interval for changing frames
+            if elapsedTime >= 1/fps
+                //if yes, increment the frame
+                frame = frame + 1
+
+                //if frame is greater than 3, reset it to one
+                if frame > 3
+                    frame = 1
+                end
+
+                //now that you know the next frame, set the Drawable to the next image by 
+                //loading the image from the ImageSheet
+                sheet:Load("resources\spearman.atlas")
+                spearman:Load(sheet:GetDrawable("spearman frame " + frame))
+                sheet:Load("resources\infantryman.atlas")
+                infantryman:Load(sheet:GetDrawable("heavyinfantry frame " + frame))
+                sheet:Load("resources\duelist.atlas")
+                duelist:Load(sheet:GetDrawable("duelist frame " + frame))
+
+                //once we have updated our drawable, we need to reset the timer.  Instead of
+                //resetting to 0, we subtract the length of time between frames to prevent any 
+                //extra time from building up over time, slowing our animation
+                elapsedTime = elapsedTime - 1/fps
+
+            elseif scene = 2
+                spearman:Hide()
+                infantryman:Hide()
+                duelist:Hide()
+                arrow:Hide()
+                hero1:Hide()
+                box1:Hide()
+                box2:Hide()
+                box3:Hide()
+                box4:Hide()
+                spearman:Hide()
+                fps = 6
+                Color blue
+                blue:SetColor(0, 0.9, 0, 1)
+                Drawable sky
+                sky:LoadFilledRectangle(590, 290, blue)
+                sky:SetPosition(1, 300)
+                Add(sky)
+            end
+        end
     end
 end

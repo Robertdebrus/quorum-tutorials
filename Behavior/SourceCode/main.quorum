@@ -1,21 +1,10 @@
 use Libraries.Game.Game
 use Libraries.Game.Graphics.Drawable
 use Libraries.Game.Graphics.Color
-use Libraries.Game.Graphics.ImageSheet
-class Main is Game
-    
-    Drawable spearman
-    Drawable infantryman
-    Drawable duelist
-    ImageSheet sheet
-    //this line declares a number variable representing the frame rate for the animation
-    number fps = 4
-    //this line creates a number variable to track the time since the last frame change
-    number elapsedTime = 0
-    //this line creates an integer variable to track which frame we are displaying
-    integer frame = 1
-    action Main
 
+class Main is Game
+
+    action Main
         StartGame()
     end
 
@@ -25,18 +14,7 @@ class Main is Game
         box:LoadFilledRectangle(300, 200, color:Red())
         box:SetPosition(250, 250)
         Add(box)
-        sheet:Load("resources\Duelist.atlas")
-        duelist:Load(sheet:GetDrawable("duelist"))
-        Add(duelist)
-        sheet:Load("resources\HeavyInfantry.atlas")
-        infantryman:Load(sheet:GetDrawable("heavyinfantry"))
-        Add(infantryman)
-        sheet:Load("resources\Spearman.atlas")
-        spearman:Load(sheet:GetDrawable("javelineer"))
-        Add(spearman)
-        duelist:SetX(150)
-        infantryman:SetX(100)
-        spearman:SetX(200)
+
         RotationBehavior rotate
         box:AddBehavior(rotate)
     end

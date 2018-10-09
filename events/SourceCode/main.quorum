@@ -85,7 +85,6 @@ class Main is Game
 end
 */
 //Part 4
-/*
 use Libraries.Game.Game
 use Libraries.Game.Graphics.Drawable
 
@@ -108,7 +107,7 @@ class Main is Game
    action Update(number seconds)
    end
 end
-*/
+/*
 use Libraries.Game.Game
 use Libraries.Game.Graphics.Drawable
 
@@ -132,3 +131,4 @@ class Main is Game
    action Update(number seconds)
    end
 end
+*/

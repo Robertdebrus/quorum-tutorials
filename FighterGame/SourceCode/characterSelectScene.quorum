@@ -1,0 +1,77 @@
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
+use Libraries.Game.Graphics.ImageSheet
+use Libraries.System.File
+use Libraries.Game.Layer2D
+
+class characterSelectScene is Game
+    Drawable spearman
+    Drawable infantryman
+    Drawable duelist
+    Drawable arrow
+    ImageSheet sheet
+    ColorSquare hero1
+    MouseFollower box1
+    MouseFollower box2
+    MouseFollower box3
+    MouseFollower box4   
+    on create
+        public Layer2D characterSelect
+
+        Color grey
+        grey:SetColor(0, 0, 0, 0.5)
+        Color white
+        white = white:White()
+        hero1:LoadFilledRectangle(700, 500, white)
+        hero1:SetPosition(1, 1)
+
+        box1:LoadFilledRectangle(390, 290, grey)
+        box1:SetPosition(1, 1)
+        characterSelect:Add(box1)
+        AddMouseMovementListener(box1)
+
+        box2:LoadFilledRectangle(390, 290, grey)
+        box2:SetPosition(400, 300)
+        characterSelect:Add(box2)
+        AddMouseMovementListener(box2)
+
+        box3:LoadFilledRectangle(390, 290, grey)
+        box3:SetPosition(1, 300)
+        characterSelect:Add(box3)
+        AddMouseMovementListener(box3)
+
+        box4:LoadFilledRectangle(390, 290, grey)
+        box4:SetPosition(400, 1)
+        characterSelect:Add(box4)
+        AddMouseMovementListener(box4)
+
+        sheet:Load("resources\Duelist.atlas")
+        duelist:Load(sheet:GetDrawable("duelist frame 1"))
+        characterSelect:Add(duelist)
+
+        sheet:Load("resources\HeavyInfantry.atlas")
+        infantryman:Load(sheet:GetDrawable("heavyinfantry frame 1"))
+        characterSelect:Add(infantryman)
+
+        sheet:Load("resources\Spearman.atlas")
+        spearman:Load(sheet:GetDrawable("spearman frame 1"))
+        characterSelect:Add(spearman)
+
+        File file
+        file:SetPath("resources\Arrow.png")
+        arrow:Load(file)
+        characterSelect:Add(arrow)
+
+        duelist:SetX(150)
+        duelist:SetY(125)
+        infantryman:SetX(150)
+        infantryman:SetY(400)
+        spearman:SetX(550)
+        spearman:SetY(400)
+        arrow:SetX(500)
+        arrow:SetY(80)
+
+        AddLayer(characterSelect)    
+    end
+end

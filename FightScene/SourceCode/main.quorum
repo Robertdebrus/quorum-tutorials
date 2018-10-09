@@ -1,0 +1,68 @@
+use Libraries.Game.Game
+use Libraries.Game.Graphics.Drawable
+use Libraries.Game.Graphics.Color
+use Libraries.Game.Graphics.ImageSheet
+use Libraries.System.File
+use Libraries.Game.Layer2D
+
+class Main is Game
+    Controller spearman
+    Controller infantryman
+    Controller duelist
+    ImageSheet sheet
+    Drawable ground
+    Drawable sky
+   //this line declares a number variable representing the frame rate for the animation
+    number fps = 3
+    //this line creates a number variable to track the time since the last frame change
+    number elapsedTime = 0
+    //this line creates an integer variable to track which frame we are displaying
+    integer frame = 1
+
+    text character = "duelist"
+
+    action Main
+        StartGame()
+    end
+
+    action CreateGame
+
+        public Layer2D fightScene
+        sheet:Load("resources\duelist.atlas")
+        duelist:Load(sheet:GetDrawable("duelist frame 1"))
+
+        sheet:Load("resources\infantryman.atlas")
+        infantryman:Load(sheet:GetDrawable("heavyinfantry frame 1"))
+
+        sheet:Load("resources\spearman.atlas")
+        spearman:Load(sheet:GetDrawable("spearman frame 1"))
+
+        if character = "spearman"
+        fightScene:Add(spearman)
+        elseif character = "infantryman"
+        fightScene:Add(infantryman)
+        elseif character = "duelist"
+        fightScene:Add(duelist)
+        end
+
+        Color blue
+        blue:SetColor(0.1, 0.1, 2, 0.5)
+        Drawable sky
+        sky:LoadFilledRectangle(800, 300, blue)
+        sky:SetPosition(1, 300)
+        Add(sky)
+
+        Color brown
+        brown:SetColor(0.5, 0.4, 0.5, 0.5)
+        Drawable ground
+        ground:LoadFilledRectangle(800, 300, brown)
+        ground:SetPosition(1, 10)
+        Add(ground)
+
+
+        AddLayer(fightScene)
+    end
+
+    action Update(number seconds)
+    end
+end
