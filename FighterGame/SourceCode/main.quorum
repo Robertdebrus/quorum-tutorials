@@ -5,12 +5,16 @@ use Libraries.Game.Graphics.ImageSheet
 use Libraries.System.File
 use Libraries.Game.Layer2D
 use Libraries.Interface.Controls.Button
+use Libraries.Game.InputMonitor
+use Libraries.Interface.Events.KeyboardEvent
 class Main is Game
     
     Drawable spearman
     Drawable infantryman
     Drawable duelist
     Drawable arrow
+    Drawable sky
+    Drawable ground
     ImageSheet sheet
     ColorSquare hero1
     MouseFollower box1
@@ -18,6 +22,9 @@ class Main is Game
     MouseFollower box3
     MouseFollower box4
     
+    InputMonitor monitor
+    KeyboardEvent keys
+
     integer scene = 1
 
     //this line declares a number variable representing the frame rate for the animation
@@ -75,13 +82,25 @@ class Main is Game
         File file
         file:SetPath("resources\Arrow.png")
         arrow:Load(file)
-        characterSelect:Add(arrow)
+        //characterSelect:Add(arrow)
         
 
+        Color blue
+        blue:SetColor(0, 0, 0.9, 1)
+        sky:LoadFilledRectangle(800, 410, blue)
+        sky:SetPosition(1, 250)
+
+        Color color
+        color:SetColor(0.76, 0.7, 0.7, 0.7)
+        ground:LoadFilledRectangle(800, 250, color)
+        ground:SetPosition(1,1)
 
         characterSelect:Add(duelist)
         characterSelect:Add(infantryman)
         characterSelect:Add(spearman)
+
+        Add(sky)
+        Add(ground)
 
         duelist:SetX(150)
         duelist:SetY(125)
@@ -92,15 +111,38 @@ class Main is Game
         arrow:SetX(500)
         arrow:SetY(80)
 
+        
+        spearman:Hide()
+        infantryman:Hide()
+        duelist:Hide()
+        arrow:Hide()
+        hero1:Hide()
+        box1:Hide()
+        box2:Hide()
+        box3:Hide()
+        box4:Hide()
+        spearman:Hide()
+        sky:Hide()
+        ground:Hide()
+
         AddLayer(characterSelect)   
     end
 
-      action Update(number seconds)
+    action Update(number seconds)
+        if monitor:IsKeyPressed(keys:SPACE)
+            if scene = 1 
+             scene = 2
+            elseif scene = 2
+             scene = 1
+            end
+        else
+        pressed = false
+        end
         if scene = 1
             //this line adds the seconds since the last frame to our timer variables
             elapsedTime = elapsedTime + seconds
             //this line checks if the elapsed time is greater than our interval for changing frames
-            if elapsedTime >= 1/fps
+            if elapsedTime >= 0.5/fps
                 //if yes, increment the frame
                 frame = frame + 1
 
@@ -108,7 +150,18 @@ class Main is Game
                 if frame > 3
                     frame = 1
                 end
-
+                sky:Hide()
+                ground:Hide()
+                spearman:Show()
+                infantryman:Show()
+                duelist:Show()
+                arrow:Show()
+                hero1:Show()
+                box1:Show()
+                box2:Show()
+                box3:Show()
+                box4:Show()
+                spearman:Show()
                 //now that you know the next frame, set the Drawable to the next image by 
                 //loading the image from the ImageSheet
                 sheet:Load("resources\spearman.atlas")
@@ -122,8 +175,18 @@ class Main is Game
                 //resetting to 0, we subtract the length of time between frames to prevent any 
                 //extra time from building up over time, slowing our animation
                 elapsedTime = elapsedTime - 1/fps
+            end
+        elseif scene = 2
+            elapsedTime = elapsedTime + seconds
+            //this line checks if the elapsed time is greater than our interval for changing frames
+            if elapsedTime >= 1/fps
+                //if yes, increment the frame
+                frame = frame + 1
 
-            elseif scene = 2
+                //if frame is greater than 3, reset it to one
+                if frame > 3
+                    frame = 1
+                end
                 spearman:Hide()
                 infantryman:Hide()
                 duelist:Hide()
@@ -134,14 +197,20 @@ class Main is Game
                 box3:Hide()
                 box4:Hide()
                 spearman:Hide()
+                sky:Show()
+                ground:Show()
                 fps = 6
-                Color blue
-                blue:SetColor(0, 0.9, 0, 1)
-                Drawable sky
-                sky:LoadFilledRectangle(590, 290, blue)
-                sky:SetPosition(1, 300)
-                Add(sky)
+                if monitor:IsKeyPressed(keys:SPACE)
+                    if scene = 1 
+                    scene = 2
+                    elseif scene = 2
+                    scene = 1
+                    end
+                else
+                pressed = false
+                end
             end
+            
         end
     end
 end
