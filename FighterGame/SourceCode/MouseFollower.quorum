@@ -7,7 +7,7 @@ use Libraries.Game.Graphics.Drawable
 use Libraries.Game.Graphics.Color
 use Libraries.Interface.Controls.Button
 
-
+//Pretty colors
 class MouseFollower is Drawable, MouseMovementListener, MouseListener, Button
     Color clickColor
     Color releaseColor
@@ -19,30 +19,5 @@ class MouseFollower is Drawable, MouseMovementListener, MouseListener, Button
 
         // Add this object as a listener so that it receives mouse events when it is clicked.
         AddMouseListener(me)
-    end   
-    action ClickedMouse(MouseEvent event)
-        SetColor(releaseColor)
-        repeat 10 times
-        SetColor(releaseColor)
-        end 
-//        SetColor(clickColor)
-
-    end
-   // This action will be called when the ColorSquare receives a MouseEvent from a mouse button being released.
-//   action ReleasedMouse(MouseEvent event)
-//       SetColor(releaseColor)
-//   end
-   // This action will be called when the MouseFollower receives a MouseEvent because the mouse was moved with no mouse buttons being held down.
-    action MovedMouse(MouseEvent event)
-       //SetColor(clickColor)
-       //SetCenter(x, y)
-    end
-   // This action will be called when the MouseFollower receives a MouseEvent because the mouse was moved while a mouse button was being held down.
-    Affine2 affine
-    action DraggedMouse(MouseEvent event)
-        // This code makes the box move in the opposite direction of the mouse.
-        number x = event:GetMovementX()
-        number y = event:GetMovementY()
-        //affine:Translate(-x, -y)
     end
  end
