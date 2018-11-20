@@ -25,7 +25,8 @@ class Main is Game
     MouseFollower box4
     InputMonitor monitor
     KeyboardEvent keys
-    Drawable hero
+    public Drawable  hero
+    text heroname = ""
 
     public integer scene = 1
     public integer character = 0
@@ -134,18 +135,76 @@ class Main is Game
 
         AddLayer(characterSelect)   
     end
-
-    action Update(number seconds)
-        if monitor:IsKeyPressed(keys:SPACE)
-            if scene = 1 
-             scene = 2
-            elseif scene = 2
-             scene = 1
+    
+    action Controller
+            //Controls - WIP
+        if scene = 2
+            if monitor:IsKeyPressed(keys:RIGHT)
+                hero:MoveX(10)
+            else
+            pressed = false
             end
-        else
-        pressed = false
+            if monitor:IsKeyPressed(keys:LEFT)
+                hero:MoveX(-10)
+            else
+            pressed = false
+            end
+            if monitor:IsKeyPressed(keys:UP)
+                hero:MoveY(10)
+            else
+            pressed = false
+            end
+            if monitor:IsKeyPressed(keys:DOWN)
+                hero:MoveY(-10)
+            else
+            pressed = false
+            end
+        end
+    end
+
+    action SetUp
+//first, make all sprites and images hide
+        spearman:Hide()
+        infantryman:Hide()
+        duelist:Hide()                
+        fugitive:Hide()
+        arrow:Hide()
+        hero1:Hide()
+        box1:Hide()
+        box2:Hide()
+        box3:Hide()
+        box4:Hide()
+
+        //create the "arena"
+        sky:Show()
+        ground:Show()
+        //set "hero"
+
+        if character = 1 
+        hero = infantryman
+        heroname = "infantryman"
+        elseif character = 2
+        hero = duelist
+        heroname = "duelist"
+        elseif character = 3
+        hero = spearman
+        heroname = "spearman"
+        elseif character = 4
+        hero = fugitive
+        heroname = "fugitive"
         end
 
+        //then, move the hero sprite to the starting zone
+        hero:SetX(10)
+        hero:SetY(10)
+
+        //Lo, the hero enters the arena
+        sheet:Load("resources\" + heroname + ".atlas")
+        hero:Load(sheet:GetDrawable(heroname + " frame 1"))
+        hero:Show()
+    end
+    
+    action Update(number seconds)
         //detects where is being clicked and sets up character for scene 2 accordingly
         if monitor:IsMouseButtonPressed(mouseButtons:LEFT)
             if scene = 1
@@ -155,23 +214,27 @@ class Main is Game
                 if mX < 390
                     if mY < 300
                     character = 1
+                    SetUp()
                     scene = 2
                     elseif mY > 310
                     character = 2
+                    SetUp()
                     scene = 2
                     end
                 elseif mX > 400
                     if mY < 300
                     character = 3
+                    SetUp()
                     scene = 2
                     elseif mY > 310
                     character = 4
+                    SetUp()
                     scene = 2
                     end
+                    
                 end 
             elseif scene = 2
             end
-            output character 
         end
         
 
@@ -230,82 +293,64 @@ class Main is Game
                 elapsedTime = elapsedTime - 1/fps
             end
         elseif scene = 2
-            elapsedTime = elapsedTime + seconds
-            //this line checks if the elapsed time is greater than our interval for changing frames
-            if elapsedTime >= 1/fps
-                //if yes, increment the frame
-                frame = frame + 1
-
-                //if frame is greater than 3, reset it to one
-                if frame > 3
-                    frame = 1
-                end
-
-                //first, make all sprites and images hide
-                spearman:Hide()
-                infantryman:Hide()
-                duelist:Hide()                
-                fugitive:Hide()
-                arrow:Hide()
-                hero1:Hide()
-                box1:Hide()
-                box2:Hide()
-                box3:Hide()
-                box4:Hide()
-
-                //create the "arena"
-                sky:Show()
-                ground:Show()
-                text heroname = ""
-                //set "hero"
-
-                if character = 1 
-                hero = infantryman
-                heroname = "infantryman"
-                elseif character = 2
-                hero = duelist
-                heroname = "duelist"
-                elseif character = 3
-                hero = spearman
-                heroname = "spearman"
-                elseif character = 4
-                hero = fugitive
-                heroname = "fugitive"
-                end
-
-                //then, move the hero sprite to the starting zone
-                hero:SetX(10)
-                hero:SetY(10)
                 
-                //Lo, the hero enters the arena
-                sheet:Load("resources\" + heroname + ".atlas")
-                hero:Load(sheet:GetDrawable(heroname + " frame 1"))
-                hero:Show()
+                elapsedTime = elapsedTime + seconds
+                //this line checks if the elapsed time is greater than our interval for changing frames
+                if elapsedTime >= 1/fps
+                    //if yes, increment the frame
+                    frame = frame + 1
 
-
-                fps = 5
-
-                //Controls - WIP
-                if monitor:IsKeyPressed(keys:LEFT)
-                    
-                else
-                pressed = false
-                end
-
-
-
-
-                if monitor:IsKeyPressed(keys:SPACE)
-                    if scene = 1 
-                    scene = 2
-                    elseif scene = 2
-                    scene = 1
+                    //if frame is greater than 3, reset it to one
+                    if frame > 3
+                        frame = 1
                     end
-                else
-                pressed = false
-                end
 
-            end
+                    fps = 8
+
+
+                    //Controls
+                    //movement
+                    mX = hero:GetX()
+                    mY = hero:GetY()
+                    if monitor:IsKeyPressed(keys:RIGHT)
+                        if mX < 700
+                        hero:MoveX(10)
+                        end
+                    else
+                    pressed = false
+                    end
+                    if monitor:IsKeyPressed(keys:LEFT)
+                        if mX > 1
+                        hero:MoveX(-10)
+                        end
+                    else
+                    pressed = false
+                    end
+                    if monitor:IsKeyPressed(keys:UP)
+                        if mY < 220
+                        hero:MoveY(10)
+                        end
+                    else
+                    pressed = false
+                    end
+                    if monitor:IsKeyPressed(keys:DOWN)
+                        if mY > 1
+                        hero:MoveY(-10)
+                        end
+                    else
+                    pressed = false
+                    end
+                    //attack
+                    if monitor:IsKeyPressed(keys:SPACE)
+                        sheet:Load("resources\" + heroname + ".atlas")
+                        fugitive:Load(sheet:GetDrawable(heroname + " frame " + frame))
+                    else
+                        fugitive:Load(sheet:GetDrawable(heroname + " frame " + 1))
+                    pressed = false
+                    end
+                elapsedTime = elapsedTime - 1/fps
+
+                end
         end
     end
 end
