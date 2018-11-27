@@ -8,6 +8,8 @@ use Libraries.Interface.Controls.Button
 use Libraries.Game.InputMonitor
 use Libraries.Interface.Events.KeyboardEvent
 use Libraries.Interface.Events.MouseEvent
+use Libraries.Compute.Random
+
 class Main is Game
     Drawable spearman
     Drawable infantryman
@@ -25,11 +27,38 @@ class Main is Game
     MouseFollower box4
     InputMonitor monitor
     KeyboardEvent keys
-    public Drawable  hero
+    public Drawable hero
     text heroname = ""
+    public Drawable foe = spearman
+    text foename = "spearman"
+    
+    number HeroSHitpoints = 10
+    number HeroSAttack = 1.4
+    number HeroSAgility = 1
+    number HeroDHitpoints = 9.5
+    number HeroDAttack = 1.2
+    number HeroDAgility = 1.1
+    number HeroIHitpoints = 11
+    number HeroIAttack = 1.3
+    number HeroIAgility = 0.9
+    number HeroFHitpoints = 9
+    number HeroFAttack = 1.2
+    number HeroFAgility = 1.2
+
+    number HeroHitpoints = 0
+    number HeroAttack = 0
+    number HeroAgility = 0
+
+    number FoeHitpoints = 0
+    number FoeAttack = 0
+    number FoeAgility = 0
+
+    integer jumping = 0
+    integer jumped = 0
+    integer jump = 0
 
     public integer scene = 1
-    public integer character = 0
+    public number character = 0
 
     //this line declares a number variable representing the frame rate for the animation
     number fps = 3
@@ -140,22 +169,22 @@ class Main is Game
             //Controls - WIP
         if scene = 2
             if monitor:IsKeyPressed(keys:RIGHT)
-                hero:MoveX(10)
+                hero:MoveX(10 * HeroAgility)
             else
             pressed = false
             end
             if monitor:IsKeyPressed(keys:LEFT)
-                hero:MoveX(-10)
+                hero:MoveX(-10 * HeroAgility)
             else
             pressed = false
             end
             if monitor:IsKeyPressed(keys:UP)
-                hero:MoveY(10)
-            else
-            pressed = false
-            end
-            if monitor:IsKeyPressed(keys:DOWN)
-                hero:MoveY(-10)
+                repeat 3 times 
+                hero:MoveY(10 * HeroAgility)
+                end
+                repeat 3 times 
+                hero:MoveY(-10 * HeroAgility)
+                end
             else
             pressed = false
             end
@@ -181,17 +210,29 @@ class Main is Game
         //set "hero"
 
         if character = 1 
-        hero = infantryman
-        heroname = "infantryman"
+            hero = infantryman
+            heroname = "infantryman"
+            number HeroHitpoints = HeroIHitpoints
+            number HeroAttack = HeroIAttack
+            number HeroAgility = HeroIAgility
         elseif character = 2
-        hero = duelist
-        heroname = "duelist"
+            hero = duelist
+            heroname = "duelist"
+            number HeroHitpoints = HeroDHitpoints
+            number HeroAttack = HeroDAttack
+            number HeroAgility = HeroDAgility
         elseif character = 3
-        hero = spearman
-        heroname = "spearman"
+            hero = spearman
+            heroname = "spearman"
+            number HeroHitpoints = HeroSHitpoints
+            number HeroAttack = HeroSAttack
+            number HeroAgility = HeroSAgility
         elseif character = 4
-        hero = fugitive
-        heroname = "fugitive"
+            hero = fugitive
+            heroname = "fugitive"
+            number HeroHitpoints = HeroFHitpoints
+            number HeroAttack = HeroFAttack
+            number HeroAgility = HeroFAgility
         end
 
         //then, move the hero sprite to the starting zone
@@ -202,6 +243,36 @@ class Main is Game
         sheet:Load("resources\" + heroname + ".atlas")
         hero:Load(sheet:GetDrawable(heroname + " frame 1"))
         hero:Show()
+
+        // WIP - currently casues a crash, and the foe is facing the same way as the hero
+        /*
+        //The Opponent - Randomly chosen from the thre other choices of hero
+        Random random
+        number randomfoe = random:RandomIntegerBetween(0, 4)
+        randomfoe = randomfoe - character 
+        //returns a number from -4.0 to 3.0
+        if randomfoe < -2.0
+            foe = infantryman
+            foename = "infantryman"
+        elseif randomfoe < 0
+            foe = duelist
+            foename = "duelist"
+        elseif randomfoe < 2.0
+            foe = spearman
+            foename = "spearman"
+        elseif randomfoe < 4.0
+            foe = fugitive
+            foename = "fugitive"
+        end
+        foe:SetX(400)
+        foe:SetY(10)
+
+        //And the the hero's enemy enters the arena
+        sheet:Load("resources\" + foename + ".atlas")
+        foe:Load(sheet:GetDrawable(foename + " frame 1"))
+        foe:Show()
+        //Facing the wrong way!!!
+        */
     end
     
     action Update(number seconds)
@@ -293,7 +364,6 @@ class Main is Game
                 elapsedTime = elapsedTime - 1/fps
             end
         elseif scene = 2
-                
                 elapsedTime = elapsedTime + seconds
                 //this line checks if the elapsed time is greater than our interval for changing frames
                 if elapsedTime >= 1/fps
@@ -327,25 +397,37 @@ class Main is Game
                     pressed = false
                     end
                     if monitor:IsKeyPressed(keys:UP)
-                        if mY < 220
-                        hero:MoveY(10)
-                        end
+                        jump = 1
                     else
                     pressed = false
                     end
-                    if monitor:IsKeyPressed(keys:DOWN)
-                        if mY > 1
-                        hero:MoveY(-10)
+
+                    //execute jump action
+                        if jump = 1
+                            if jumped = 0
+                                if jumping > 2
+                                    jumped = 1
+                                elseif jumping < 3
+                                    jumping = jumping + 1
+                                    hero:MoveY(10)
+                                end
+                            end
+                            if jumped = 1
+                                if jumping > 0
+                                    jumping = jumping - 1
+                                    hero:MoveY(-10)
+                                elseif jumping = 0 
+                                    jumped = 0
+                                    jump = 0
+                                end
+                            end
                         end
-                    else
-                    pressed = false
-                    end
                     //attack
                     if monitor:IsKeyPressed(keys:SPACE)
                         sheet:Load("resources\" + heroname + ".atlas")
-                        fugitive:Load(sheet:GetDrawable(heroname + " frame " + frame))
+                        hero:Load(sheet:GetDrawable(heroname + " frame " + frame))
                     else
-                        fugitive:Load(sheet:GetDrawable(heroname + " frame " + 1))
+                        hero:Load(sheet:GetDrawable(heroname + " frame " + 1))
                     pressed = false
                     end
                 elapsedTime = elapsedTime - 1/fps
